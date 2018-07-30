@@ -22,6 +22,7 @@ static NSString const *kARDJoinClientIdKey = @"client_id";
 static NSString const *kARDJoinMessagesKey = @"messages";
 static NSString const *kARDJoinWebSocketURLKey = @"wss_url";
 static NSString const *kARDJoinWebSocketRestURLKey = @"wss_post_url";
+static NSString const *kARDJoinPcConfigKey = @"pc_config";
 
 @implementation ARDJoinResponse
 
@@ -32,12 +33,15 @@ static NSString const *kARDJoinWebSocketRestURLKey = @"wss_post_url";
 @synthesize messages = _messages;
 @synthesize webSocketURL = _webSocketURL;
 @synthesize webSocketRestURL = _webSocketRestURL;
+@synthesize pcConfig = _pcConfig;
 
 + (ARDJoinResponse *)responseFromJSONData:(NSData *)data {
   NSDictionary *responseJSON = [NSDictionary dictionaryWithJSONData:data];
   if (!responseJSON) {
     return nil;
   }
+
+    NSLog(@"ROOM RESPONSE:\n %@", responseJSON);
   ARDJoinResponse *response = [[ARDJoinResponse alloc] init];
   NSString *resultString = responseJSON[kARDJoinResultKey];
   response.result = [[self class] resultTypeFromString:resultString];
@@ -64,6 +68,8 @@ static NSString const *kARDJoinWebSocketRestURLKey = @"wss_post_url";
   NSString *webSocketRestURLString = params[kARDJoinWebSocketRestURLKey];
   response.webSocketRestURL = [NSURL URLWithString:webSocketRestURLString];
 
+    //parse pc_config
+    response.pcConfig = params[kARDJoinPcConfigKey];
   return response;
 }
 

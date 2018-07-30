@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, ARDJoinResultType) {
 @property(nonatomic, readonly) NSArray *messages;
 @property(nonatomic, readonly) NSURL *webSocketURL;
 @property(nonatomic, readonly) NSURL *webSocketRestURL;
+@property(nonatomic, readonly) NSString *pcConfig;
 
 + (ARDJoinResponse *)responseFromJSONData:(NSData *)data;
 

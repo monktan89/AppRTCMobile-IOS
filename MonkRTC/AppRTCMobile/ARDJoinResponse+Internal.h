@@ -19,5 +19,6 @@
 @property(nonatomic, strong) NSArray *messages;
 @property(nonatomic, strong) NSURL *webSocketURL;
 @property(nonatomic, strong) NSURL *webSocketRestURL;
+@property(nonatomic, strong) NSString *pcConfig;
 
 @end

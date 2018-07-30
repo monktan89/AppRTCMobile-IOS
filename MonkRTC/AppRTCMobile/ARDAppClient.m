@@ -37,8 +37,9 @@
 #import "ARDWebSocketChannel.h"
 #import "RTCIceCandidate+JSON.h"
 #import "RTCSessionDescription+JSON.h"
+#import "RTCIceServer+JSON.h"
 
-static NSString * const kARDIceServerRequestUrl = @"https://appr.tc/params";
+static NSString * const kARDIceServerRequestUrl = @"https://www.apprtc.club/params";
 
 static NSString * const kARDAppClientErrorDomain = @"ARDAppClient";
 static NSInteger const kARDAppClientErrorUnknown = -1;
@@ -232,6 +233,7 @@ static int const kKbpsMultiplier = 1000;
 
   // Request TURN.
   __weak ARDAppClient *weakSelf = self;
+    /*
   [_turnClient requestServersWithCompletionHandler:^(NSArray *turnServers,
                                                      NSError *error) {
     if (error) {
@@ -243,6 +245,8 @@ static int const kKbpsMultiplier = 1000;
     strongSelf.isTurnComplete = YES;
     [strongSelf startSignalingIfReady];
   }];
+     */
+    
 
   // Join room on room server.
   [_roomServerClient joinRoomWithRoomId:roomId
@@ -276,6 +280,20 @@ static int const kKbpsMultiplier = 1000;
     }
     strongSelf.webSocketURL = response.webSocketURL;
     strongSelf.webSocketRestURL = response.webSocketRestURL;
+          
+          // add by vinton on 20180530
+    NSString *pcConfig = response.pcConfig;
+    NSDictionary *turnResponseDict = [NSDictionary dictionaryWithJSONString:pcConfig];
+    NSMutableArray *turnServers = [NSMutableArray array];
+    [turnResponseDict[@"iceServers"] enumerateObjectsUsingBlock:
+         ^(NSDictionary *obj, NSUInteger idx, BOOL *stop){
+             [turnServers addObject:[RTCIceServer serverFromJSONDictionary:obj]];
+             }];
+  if (turnServers) {
+      strongSelf.iceServers = turnServers;
+      strongSelf.isTurnComplete = YES;
+      }
+      // add end
     [strongSelf registerWithColliderIfReady];
     [strongSelf startSignalingIfReady];
   }];

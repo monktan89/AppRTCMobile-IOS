@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, ARDAppClientState) {
 @class ARDAppClient;
 @class ARDSettingsModel;
 @class RTCMediaConstraints;
+@class RTCIceServer;
 
 // The delegate is informed of pertinent events and will be called on the
 // main queue.
